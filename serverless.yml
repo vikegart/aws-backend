@@ -1,0 +1,36 @@
+service: aws-backend
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: nodejs16.x
+  stage: dev
+  region: eu-west-1
+
+plugins:
+  - serverless-webpack
+  - serverless-auto-swagger
+
+custom:
+  webpack:
+    webpackConfig: 'webpack.config.js' 
+  autoswagger:
+    title: 'Hot Wheels SHOP'
+
+functions:
+  getProductsList:
+    handler: './src/handlers/getProductsList.main'
+    events:
+      - http:
+          path: products
+          method: get
+          cors: true
+          swaggerTags: ['product service']
+  getProductById:
+    handler: './src/handlers/getProductById.main'
+    events:
+      - http:
+          path: products/{productId}
+          method: get
+          cors: true
+          swaggerTags: ['product service']
