@@ -89,5 +89,6 @@
       "type": "object"
     }
   },
-  "securityDefinitions": {}
+  "securityDefinitions": {},
+  "basePath": "/dev"
 };

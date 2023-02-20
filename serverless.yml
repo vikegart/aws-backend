@@ -16,6 +16,8 @@ custom:
     webpackConfig: 'webpack.config.js' 
   autoswagger:
     title: 'Hot Wheels SHOP'
+    apiType: 'http'
+    basePath: '/dev'
 
 functions:
   getProductsList:
