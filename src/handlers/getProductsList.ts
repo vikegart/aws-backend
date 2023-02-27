@@ -1,4 +1,4 @@
-import { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda";
+import { APIGatewayProxyResult } from "aws-lambda";
 import { HEADERS as headers, STATUS_CODES } from "../../constants";
 import { DbConnector } from "../data-layer/db-connector";
 

@@ -8,12 +8,16 @@ provider:
   region: eu-west-1
 
 plugins:
+  - serverless-dotenv-plugin
   - serverless-webpack
   - serverless-auto-swagger
 
 custom:
   webpack:
-    webpackConfig: 'webpack.config.js' 
+    webpackConfig: 'webpack.config.js'
+    includeModules:
+      forceInclude:
+        - pg
   autoswagger:
     title: 'Hot Wheels SHOP'
     apiType: 'http'
@@ -36,3 +40,12 @@ functions:
           method: get
           cors: true
           swaggerTags: ['product service']
+  createProduct:
+    handler: './src/handlers/createProduct.main'
+    events:
+      - http:
+          path: products
+          method: post
+          cors: true
+          bodyType: 'CreateProduct'
+          swaggerTags: [ 'product service' ]
