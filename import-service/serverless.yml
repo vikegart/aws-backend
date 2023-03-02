@@ -1,0 +1,55 @@
+service: import-service
+frameworkVersion: '3'
+useDotenv: true
+
+provider:
+  name: aws
+  runtime: nodejs16.x
+  stage: dev
+  region: eu-west-1
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action: ['s3:ListBucket', 's3:GetObject', 's3:PutObject', 's3:DeleteObject']
+          Resource: arn:aws:s3:::epam-cloud-training-import-service/*
+  environment:
+    BUCKET: ${env:BUCKET}
+
+plugins:
+  - serverless-dotenv-plugin
+  - serverless-webpack
+  - serverless-auto-swagger
+
+custom:
+  webpack:
+    webpackConfig: 'webpack.config.js'
+  autoswagger:
+    title: 'File Uploading window'
+    apiType: 'http'
+    basePath: '/dev'
+
+functions:
+  importFileParser:
+    handler: './src/handlers/importFileParser.main'
+    events:
+      - s3:
+          bucket: ${env:BUCKET}
+          event: s3:ObjectCreated:*
+          rules:
+            - prefix: 'uploaded/'
+          existing: true
+  importProductFile:
+    handler: './src/handlers/importProductsFile.main'
+    events:
+      - http:
+          path: /import
+          method: get
+          cors: true
+          queryStringParameters:
+            name:
+              required: true
+              type: 'string'
+              description: 'name of file'
+          swaggerTags: ['product import']
+
